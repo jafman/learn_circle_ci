@@ -33,5 +33,5 @@ workflows:
     jobs:
       - welcome_jaf/run
       - print-hello
-      - print-world:
+      - print-my-name:
           requires: [print-hello]
