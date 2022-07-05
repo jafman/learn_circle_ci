@@ -1,38 +1,38 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs:
-  welcome_jaf: circleci/welcome-orb@0.4.1
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  print-hello:
+  save-to-file:
     docker:
       - image: circleci/node:13.8.0
+    working_directory:  /temp
     # steps
     steps:
       - run:
           name: "print Hello"
-          command: "echo Hello, "
+          command: |
+            mkdir -p files
+            echo 'Hello, World!' > files/hello.txt
+      - persist_to_workspace:
+          root: files
+          paths:
+            - /*
 
-  print-my-name:
+  read-from-file:
     docker:
       - image: circleci/node:13.8.0
+    working_directory:  /temp
     # steps
     steps:
+      - attach_workspace:
+          at: /temp/files
       - run:
-          name: "print my name"
+          name: "read file content"
           command:  |
-            echo $MY_NAME
+            cat hello.txt
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  greetings-workflow:
+  info-sharing-workflow:
     jobs:
-      - welcome_jaf/run
-      - print-hello
-      - print-my-name:
-          requires: [print-hello]
+      - save-to-file
+      - read-from-file:
+          requires: [save-to-file]
