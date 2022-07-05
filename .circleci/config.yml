@@ -29,7 +29,8 @@ jobs:
       - run:
           name: "read file content"
           command:  |
-            cat files/hello.txt
+            pwd
+            ls
 
 workflows:
   info-sharing-workflow:
