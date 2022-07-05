@@ -4,12 +4,12 @@ jobs:
   save-to-file:
     docker:
       - image: circleci/node:13.8.0
-    working_directory:  /temp
+    working_directory:  /tmp
     # steps
     # https://circleci.com/docs/2.0/configuration-reference#persisttoworkspace
     steps:
       - run:
-          name: "print Hello"
+          name: "Save to file"
           command: |
             mkdir -p files/texts
             echo 'Hello, World!' > files/texts/hello.txt
@@ -21,11 +21,11 @@ jobs:
   read-from-file:
     docker:
       - image: circleci/node:13.8.0
-    working_directory:  /temp
+    working_directory:  /tmp
     # steps
     steps:
       - attach_workspace:
-          at: /temp/files
+          at: /tmp/files
       - run:
           name: "read file content"
           command:  |
